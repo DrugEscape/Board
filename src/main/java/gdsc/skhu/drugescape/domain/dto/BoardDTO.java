@@ -3,7 +3,6 @@ package gdsc.skhu.drugescape.domain.dto;
 import gdsc.skhu.drugescape.domain.model.Board;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -17,13 +16,10 @@ public class BoardDTO {
     private String title;
 
     @Schema(description = "내용", example = "저는 ~~~")
-    private String body;
+    private String content;
 
-    @Schema(description = "이미지", example = "가족 사진")
-    private MultipartFile image;
-
-    @Schema(description = "새로운 이미지", example = "행복한 가족 사진")
-    private MultipartFile newImage;
+    @Schema(description = "이미지 URL", example = "https://example.com/image.jpg")
+    private String imageURL; // 변경된 부분
 
     @Schema(description = "좋아요 수", example = "+10")
     private Integer heartCnt;
@@ -37,7 +33,7 @@ public class BoardDTO {
     public static BoardDTO of(Board board) {
         return BoardDTO.builder()
                 .title(board.getTitle())
-                .body(board.getBody())
+                .content(board.getContent())
                 .heartCnt(board.getHeartCnt())
                 .createdAt(board.getCreatedAt())
                 .lastModifiedAt(board.getLastModifiedAt())

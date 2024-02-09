@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,34 +20,40 @@ public class Board extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String title;   // 제목
+    private String title;
 
-    @Column(nullable = false)
-    private String body;   // 내용
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;      // 작성자
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<Comment> comments; // 댓글
-    private Integer commentCnt;     // 댓글 수
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<Heart> hearts;       // 좋아요
-    private Integer heartCnt;        // 좋아요 수
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Heart> hearts = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Image image;
-
-    public void heartChange(Integer heartCnt) {
-        this.heartCnt = heartCnt;
-    }
-
-    public void commentChange(Integer commentCnt) {
-        this.commentCnt = commentCnt;
-    }
 
     public void uploadImage(Image uploadImage) {
         this.image = uploadImage;
+    }
+
+    public void updateDetails(String title, String content, Image image) {
+        this.title = title;
+        this.content = content;
+        this.image = image;
+    }
+
+    // Dynamically calculate hearts and comments count
+    public int getHeartCnt() {
+        return hearts.size();
+    }
+
+    public int getCommentCnt() {
+        return comments.size();
     }
 }

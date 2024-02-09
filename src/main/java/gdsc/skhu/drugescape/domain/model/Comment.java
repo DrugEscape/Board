@@ -20,12 +20,14 @@ public class Comment {
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;      // 작성자
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
     private Board board;    // 댓글이 달린 게시판
 
-    public void update(String newBody) {
+    public void updateBody(String newBody) {
         this.body = newBody;
     }
 }

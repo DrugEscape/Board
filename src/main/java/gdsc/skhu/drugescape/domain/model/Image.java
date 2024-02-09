@@ -17,10 +17,7 @@ public class Image {
     private Long id;
 
     @Column(nullable = false)
-    private String originalFilename;    // 원본 파일명
-
-    @Column(nullable = false)
-    private String savedFilename;        // 서버에 저장된 파일명
+    private String imageURL;
 
     @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
     private Board board;
